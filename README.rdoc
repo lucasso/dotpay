@@ -23,7 +23,7 @@ Sample URLC callback handling action.
     response = Dotpay::Response.new(params)
 
     if response.authorized?
-      if response.status_done?
+      if response.status == "completed"
         # process your order
       end
 

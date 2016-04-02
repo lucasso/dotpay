@@ -43,7 +43,7 @@ describe Dotpay do
         ).to_return(:status => 200, :body => "OK", :headers => {})
       end
 
-      it { should be_true }
+      it { should be_truthy }
     end
 
     context "error" do

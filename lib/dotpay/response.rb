@@ -1,14 +1,8 @@
-require 'digest/md5'
+require 'digest'
 
 module Dotpay
   class Response
-    CHECKSUM_KEYS = %w(id control t_id amount email service code username password t_status)
-
-    STATUS_NEW          = 1
-    STATUS_DONE         = 2
-    STATUS_REJECTED     = 3
-    STATUS_REFUND       = 4
-    STATUS_COMPLAINT    = 5
+    SIGNATURE_KEYS = %w(id operation_number operation_type operation_status operation_amount operation_currency operation_withdrawal_amount operation_commission_amount operation_original_amount operation_original_currency operation_datetime operation_related_number control description email p_info p_email channel channel_country geoip_country)
 
     attr_reader :params
 
@@ -16,57 +10,17 @@ module Dotpay
       @params = params
     end
 
-    def t_id
-      params['t_id']
-    end
-
-    def control
-      params['control']
-    end
-
-    def amount
-      params['amount']
-    end
-
     def authorized?
-      params['md5'] == calculate_checksum
-    end
-
-    def status
-      params['t_status'].to_i
-    end
-
-    def status_new?
-      status == STATUS_NEW
-    end
-
-    def status_done?
-      status == STATUS_DONE
-    end
-
-    def status_rejected?
-      status == STATUS_REJECTED
-    end
-
-    def status_refund?
-      status == STATUS_REFUND
-    end
-
-    def status_complaint?
-      status == STATUS_COMPLAINT
+      params['signature'] == calculate_signature
     end
 
     private
 
-    def calculate_checksum
+    def calculate_signature
       data = [ Dotpay.configuration.pin ]
-
-      CHECKSUM_KEYS.each { |key| data << params[key] }
-
-      data_string = data.join(':')
-
-      Digest::MD5.hexdigest(data_string)
+      data += SIGNATURE_KEYS.map { |key| params[key] }
+      puts Digest::SHA256.hexdigest(data_string)
+      Digest::SHA256.hexdigest(data_string)
     end
-
   end
 end

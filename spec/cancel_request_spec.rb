@@ -17,10 +17,25 @@ describe Dotpay::CancelRequest do
 
     subject { Dotpay::CancelRequest.new(t_id, amount, control) }
 
-    its(:t_id) { should == t_id }
-    its(:amount) { should == amount }
-    its(:control) { should == control }
-    its(:type) { should == Dotpay::CancelRequest::TYPE_FULL }
-    its(:checksum) { should == "5f6b85d31fa19ee60db2e2bcc9c595f6" }
+    it "#t_id returns valid value" do
+      subject.t_id.should == t_id
+    end
+
+    it "#amount returns valid value" do
+      subject.amount.should == amount
+    end
+
+    it "#control returns valid value" do
+      subject.control.should == control
+    end
+
+    it "#type returns valid value" do
+      subject.type.should == Dotpay::CancelRequest::TYPE_FULL
+    end
+
+    it "#checksum returns valid value" do
+      subject.checksum.should == "5f6b85d31fa19ee60db2e2bcc9c595f6"
+    end
+
   end
 end
