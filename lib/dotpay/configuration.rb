@@ -7,6 +7,8 @@ module Dotpay
     # 16-character alphanumeric string defined in section: Settings → URLC parameters
     attr_accessor :pin
 
+    attr_accessor :test_mode
+
     # Language
     #
     # Defaults to :pl
@@ -28,19 +30,18 @@ module Dotpay
     # provider's email
     attr_accessor :email
 
-    # Cancel API endpoint
-    attr_accessor :cancel_endpoint
+    # Admin panel API endpoint
+    attr_accessor :api_endpoint
 
-    # Cancel API login
-    attr_accessor :cancel_login
+    # Admin panel API login
+    attr_accessor :api_login
 
-    # Cancel API password
-    attr_accessor :cancel_password
+    # Admin panel API password
+    attr_accessor :api_password
 
     def initialize
+      @test_mode = false
       @language = :pl
-      @endpoint = 'https://ssl.dotpay.pl/'
-      @cancel_endpoint = 'https://ssl.dotpay.pl/api/cancel/'
     end
 
     ##
@@ -49,6 +50,24 @@ module Dotpay
     # option: Key for a given attribute
     def [](option)
       send(option)
+    end
+
+    def endpoint
+      return @endpoint if @endpoint
+      if test_mode
+        "https://ssl.dotpay.pl/test_payment/"
+      else
+        "https://ssl.dotpay.pl/t2/"
+      end
+    end
+
+    def api_endpoint
+      return @api_endpoint if @api_endpoint
+      if test_mode
+        "https://ssl.dotpay.pl/test_seller/api/"
+      else
+        "https://ssl.dotpay.pl/s2/login/api/"
+      end
     end
   end
 end

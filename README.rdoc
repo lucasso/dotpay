@@ -33,12 +33,8 @@ Sample URLC callback handling action.
     end
   end
 
-== Cancelling transaction using cancel API
+== Refunding a payment using dotpay admin panel API
 
-You can cancel existing transaction:
+You can refund a completed payment:
 
-  Dotpay.cancel_transaction(t_id, amount, control)
-
-Also you can do partial refund:
-
-  Dotpay.cancel_transaction(t_id, amount, control, type: 2)
+  Dotpay.client.refund_payment(control, amount, description)

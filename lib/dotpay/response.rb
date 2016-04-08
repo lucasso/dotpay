@@ -20,7 +20,6 @@ module Dotpay
       data = [ Dotpay.configuration.pin ]
       data += SIGNATURE_KEYS.map { |key| params[key] }
       data_string = data.join
-      puts Digest::SHA256.hexdigest(data_string)
       Digest::SHA256.hexdigest(data_string)
     end
   end

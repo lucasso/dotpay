@@ -8,23 +8,19 @@ module Dotpay
       @configuration = configuration
     end
 
-    def cancel_transaction(cancel_request)
+    def refund_payment(control, amount, description)
+      amount = "%0.2f" % amount
+
+      url = @configuration.api_endpoint + "payments/M1279-3810/refund/"
       params = {
-        id:       @configuration.account_id,
-        t_id:     cancel_request.t_id,
-        control:  cancel_request.control,
-        amount:   cancel_request.amount,
-        type:     cancel_request.type,
-        login:    @configuration.cancel_login,
-        passwd:   @configuration.cancel_password,
-        md5:      cancel_request.checksum
+        "control" => control,
+        "amount" => amount,
+        "description" => description
       }
 
-      response = post(@configuration.cancel_endpoint, params)
-
-      raise Error.new(response.body) unless response.body.strip == "OK"
-
-      return true
+      response = post(url, params)
+      raise Error.new(response.body) if response.code != "200"
+      true
     end
 
     private
@@ -37,6 +33,7 @@ module Dotpay
 
       request = Net::HTTP::Post.new(uri.request_uri)
       request.set_form_data(params)
+      request.basic_auth(@configuration.api_login, @configuration.api_password)
 
       https.request(request)
     end
