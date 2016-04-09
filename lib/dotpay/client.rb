@@ -8,10 +8,10 @@ module Dotpay
       @configuration = configuration
     end
 
-    def refund_payment(control, amount, description)
+    def refund_payment(operation_number, control, amount, description)
       amount = "%0.2f" % amount
 
-      url = @configuration.api_endpoint + "payments/M1279-3810/refund/"
+      url = @configuration.api_endpoint + "payments/#{operation_number}/refund/"
       params = {
         "control" => control,
         "amount" => amount,

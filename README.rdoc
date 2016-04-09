@@ -37,4 +37,4 @@ Sample URLC callback handling action.
 
 You can refund a completed payment:
 
-  Dotpay.client.refund_payment(control, amount, description)
+  Dotpay.client.refund_payment(operation_number, control, amount, description)

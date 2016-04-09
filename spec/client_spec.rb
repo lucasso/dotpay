@@ -11,7 +11,7 @@ describe Dotpay::Client do
   end
 
   describe "#refund_payment" do
-    subject { Dotpay.client.refund_payment("TX01", 1.00, 'ABC') }
+    subject { Dotpay.client.refund_payment("M1279-3810", "TX01", 1.00, "DESCRIPTION") }
 
     context "successful" do
       before do
@@ -19,7 +19,7 @@ describe Dotpay::Client do
           .with(body: {
             "control"     => "TX01",
             "amount"      => "1.00",
-            "description" => "ABC",
+            "description" => "DESCRIPTION",
           }).to_return({
             status: 200,
             body: '{ "detail": "ok" }'
@@ -35,7 +35,7 @@ describe Dotpay::Client do
           .with(body: {
             "control"     => "TX01",
             "amount"      => "1.00",
-            "description" => "ABC",
+            "description" => "DESCRIPTION",
           }).to_return({
             status: 404
           })
