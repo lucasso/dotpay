@@ -2,7 +2,28 @@ require 'digest'
 
 module Dotpay
   class Response
-    SIGNATURE_KEYS = %w(id operation_number operation_type operation_status operation_amount operation_currency operation_withdrawal_amount operation_commission_amount operation_original_amount operation_original_currency operation_datetime operation_related_number control description email p_info p_email channel channel_country geoip_country)
+    SIGNATURE_KEYS = %w(
+      id
+      operation_number
+      operation_type
+      operation_status
+      operation_amount
+      operation_currency
+      operation_withdrawal_amount
+      operation_commission_amount
+      operation_original_amount
+      operation_original_currency
+      operation_datetime
+      operation_related_number
+      control
+      description
+      email
+      p_info
+      p_email
+      channel
+      channel_country
+      geoip_country
+    )
 
     attr_reader :params
 
@@ -17,8 +38,7 @@ module Dotpay
     private
 
     def calculate_signature
-      data = [ Dotpay.configuration.pin ]
-      data += SIGNATURE_KEYS.map { |key| params[key] }
+      data = [ Dotpay.configuration.pin ] + SIGNATURE_KEYS.map { |key| params[key] }
       data_string = data.join
       Digest::SHA256.hexdigest(data_string)
     end
