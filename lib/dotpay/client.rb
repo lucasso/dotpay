@@ -13,6 +13,16 @@ module Dotpay
       get(url)
     end
 
+    def get_operation(operation_number)
+      url = @configuration.api_endpoint + "operations/#{operation_number}/"
+      get(url)
+    end
+
+    def get_operation_operations(operation_number)
+      url = @configuration.api_endpoint + "operations/#{operation_number}/operations/"
+      get(url)
+    end
+
     def refund_payment(operation_number, control, amount, description)
       amount = "%0.2f" % amount
 
