@@ -8,6 +8,11 @@ module Dotpay
       @configuration = configuration
     end
 
+    def get_payment(operation_number)
+      url = @configuration.api_endpoint + "payments/#{operation_number}/"
+      get(url)
+    end
+
     def refund_payment(operation_number, control, amount, description)
       amount = "%0.2f" % amount
 
@@ -18,12 +23,22 @@ module Dotpay
         "description" => description
       }
 
-      response = post(url, params)
-      raise Error.new(response.body) if response.code != "200"
-      true
+      post(url, params)
     end
 
-    private
+    def get(url)
+      uri = URI.parse(url)
+
+      https = Net::HTTP.new(uri.host,uri.port)
+      https.use_ssl = true
+
+      request = Net::HTTP::Get.new(uri.request_uri)
+      request.basic_auth(@configuration.api_login, @configuration.api_password)
+
+      response = https.request(request)
+      raise Error.new(response) if response.code != "200"
+      response
+    end
 
     def post(url, params)
       uri = URI.parse(url)
@@ -35,7 +50,9 @@ module Dotpay
       request.set_form_data(params)
       request.basic_auth(@configuration.api_login, @configuration.api_password)
 
-      https.request(request)
+      response = https.request(request)
+      raise Error.new(response) if response.code != "200"
+      response
     end
   end
 end
