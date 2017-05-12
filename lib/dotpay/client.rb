@@ -42,7 +42,7 @@ module Dotpay
       https = Net::HTTP.new(uri.host,uri.port)
       https.use_ssl = true
 
-      request = Net::HTTP::Get.new(uri.request_uri)
+      request = Net::HTTP::Get.new(uri.request_uri, "Content-Type" => "application/json")
       request.basic_auth(@configuration.api_login, @configuration.api_password)
 
       response = https.request(request)
@@ -56,9 +56,9 @@ module Dotpay
       https = Net::HTTP.new(uri.host,uri.port)
       https.use_ssl = true
 
-      request = Net::HTTP::Post.new(uri.request_uri)
-      request.set_form_data(params)
+      request = Net::HTTP::Post.new(uri.request_uri, "Content-Type" => "application/json")
       request.basic_auth(@configuration.api_login, @configuration.api_password)
+      request.body = params.to_json
 
       response = https.request(request)
       raise Error.new(response) if response.code != "200"
