@@ -1,6 +1,7 @@
 require "dotpay/version"
 require "dotpay/configuration"
 require "dotpay/error"
+require "dotpay/request"
 require "dotpay/response"
 require "dotpay/client"
 
@@ -35,5 +36,9 @@ module Dotpay
     def client
       @client ||= Client.new(configuration)
     end
+
+	def request(*args)
+		Request.new(configuration, *args)
+	end
   end
 end

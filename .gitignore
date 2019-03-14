@@ -6,3 +6,4 @@ spec/reports/
 coverage/
 **.tmp_*
 doc/
+*~
