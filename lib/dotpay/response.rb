@@ -27,18 +27,19 @@ module Dotpay
 
     attr_reader :params
 
-    def initialize(params)
+    def initialize(config, params)
       @params = params
+      @pin = config.pin
     end
 
     def authorized?
-      params['signature'] == calculate_signature
+      @params['signature'] == calculate_signature
     end
 
     private
 
     def calculate_signature
-      data = [ Dotpay.configuration.pin ] + SIGNATURE_KEYS.map { |key| params[key] }
+      data = [ @pin ] + SIGNATURE_KEYS.map { |key| @params[key] }
       data_string = data.join
       Digest::SHA256.hexdigest(data_string)
     end

@@ -37,8 +37,13 @@ module Dotpay
       @client ||= Client.new(configuration)
     end
 
-	def request(*args)
-		Request.new(configuration, *args)
-	end
+    def request(*args)
+      Request.new(configuration, *args)
+    end
+
+    def response(params)
+      Response.new(configuration, params)
+    end
+
   end
 end
